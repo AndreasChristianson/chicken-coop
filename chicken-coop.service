@@ -6,7 +6,7 @@ After=network.target
 [Service]
 Environment=PORT=80
 Type=simple
-User=sullage
+User=root
 ExecStart=/usr/bin/node /app/index.js
 Restart=on-failure
 

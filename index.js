@@ -1,4 +1,16 @@
 import Hapi from '@hapi/hapi'
+import {StillCamera} from "pi-camera-connect";
+
+async function takePhoto() {
+    const camera = new StillCamera();
+    try {
+        const image = await camera.takeImage();
+        console.log('Photo taken');
+        return image;
+    } catch (error) {
+        console.error('Error taking photo:', error);
+    }
+}
 
 const PORT = process.env.PORT || 3000
 
@@ -11,10 +23,10 @@ const init = async () => {
 
     server.route({
         method: 'GET',
-        path: '/',
-        handler: (request, h) => {
-
-            return 'Hello World!';
+        path: '/snapshot',
+        handler: async (request, h) => {
+            return h.response( await takePhoto())
+                .type('image/jpeg')
         }
     });
 

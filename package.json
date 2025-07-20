@@ -18,7 +18,8 @@
   "homepage": "https://github.com/AndreasChristianson/chicken-coop#readme",
   "description": "",
   "dependencies": {
-    "@hapi/hapi": "^21.4.0"
+    "@hapi/hapi": "^21.4.0",
+    "pi-camera-connect": "^0.3.4"
   },
   "type": "module"
 }
