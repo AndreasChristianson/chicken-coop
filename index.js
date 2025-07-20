@@ -1,8 +1,8 @@
 import Hapi from '@hapi/hapi'
 import * as util from 'util';
 import exec from 'child_process';
-import { v4 as uuidv4 } from 'uuid';
-import fs from  'fs'
+import {v4 as uuidv4} from 'uuid';
+import fs from 'fs'
 
 const execPromise = util.promisify(exec);
 
