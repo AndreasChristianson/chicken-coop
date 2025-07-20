@@ -1,0 +1,20 @@
+name: deploy
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  ssh-connectivity-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: whoami
+        uses: appleboy/ssh-action@v1
+        with:
+          host: chicken-coop
+          username: sullage
+          key: ${{ secrets.COOP_KEY }}
+          proxy_host: glowbox.pessimistic-it.com
+          proxy_username: sullage
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          script: |
+            whoami
