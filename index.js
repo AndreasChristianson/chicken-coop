@@ -40,7 +40,7 @@ async function readTemp(path) {
             console.log(`${path}: no crc match`);
             return null
         }
-        const temp = data.match(/.*t=(\d*)/g)[1] / 1000;
+        const temp = data.match(/.*t=(\d*)/)[1] / 1000;
         return convert(temp, "fahrenheit").to("celsius");
     } catch (err) {
         console.error(err);
