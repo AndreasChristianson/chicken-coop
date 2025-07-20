@@ -36,7 +36,8 @@ async function readTemp(path) {
         console.log(`reading ${path}`);
         const data = await fs.readFile(`${path}/w1_slave`, {encoding: 'utf8'});
         console.log(`raw data for ${path}:\n${data}`);
-        if (!/crc=\d\d YES/g.test(data)) {
+        if (!/.*crc=\d\d YES/g.test(data)) {
+            console.log(`${path}: no crc match`);
             return null
         }
         const temp = data.match(/.*t=(\d*)/g)[1] / 1000;
