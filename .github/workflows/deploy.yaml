@@ -40,7 +40,8 @@ jobs:
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
           script: |
-            git -C /app pull
+            git -C /app fetch
+            git -C /app reset --hard origin/main
             npm --prefix /app ci
             sudo cp -f /app/chicken-coop.service /lib/systemd/system/chicken-coop.service
             sudo systemctl daemon-reload
