@@ -3,15 +3,16 @@ import {promisify} from 'node:util';
 import child_process from 'node:child_process';
 import {v4 as uuidv4} from 'uuid';
 import Inert from '@hapi/inert'
+import {Mutex} from 'async-mutex';
 
 const exec = promisify(child_process.exec);
+const mutex = new Mutex();
 
 async function takePhoto() {
-
     try {
         const filename = `/app/${uuidv4()}.jpeg`
         console.log(`filename: ${filename}`);
-        const {stdout, stderr} = await exec(`rpicam-still -o ${filename}`);
+        const {stdout, stderr} = await mutex.runExclusive(exec(`rpicam-still -o ${filename}`));
         console.log(`camera stdout: ${stdout}`);
         console.log(`camera stderr: ${stderr}`);
         return filename;
@@ -40,7 +41,7 @@ const init = async () => {
             if (snapshot) {
                 return h.file(snapshot)
             }
-            return h.response("Snapshot error. One in flight").code(503)
+            return h.response("Snapshot error. See logs.").code(503)
         }
     });
 
