@@ -33,15 +33,16 @@ async function takePhoto() {
 
 async function readTemp(path) {
     try {
-        console.log(`reading ${path}`);
         const data = await fs.readFile(`${path}/w1_slave`, {encoding: 'utf8'});
         console.log(`raw data for ${path}:\n${data}`);
         if (!/crc=.. YES/.test(data)) {
             console.log(`${path}: no crc match`);
             return null
         }
-        const temp = data.match(/.*t=(\d*)/)[1] / 1000;
-        return convert(temp, "fahrenheit").to("celsius");
+        const c = data.match(/.*t=(\d*)/)[1] / 1000;
+        console.log(`${path}: ${temp}C`);
+        const f =  convert(c, "celsius").to("fahrenheit");
+        return `${f.toFixed(2)}f`
     } catch (err) {
         console.error(err);
     }
@@ -50,7 +51,6 @@ async function readTemp(path) {
 
 async function readTemps() {
     const promises = thermistors.map(async ({name, path}) => {
-        console.log(`thermistor - ${name}: ${path}`);
         return {[name]: await readTemp(path)};
     })
 
