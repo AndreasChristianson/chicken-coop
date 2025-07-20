@@ -2,6 +2,7 @@ import Hapi from '@hapi/hapi'
 import {promisify} from 'node:util';
 import child_process from 'node:child_process';
 import {v4 as uuidv4} from 'uuid';
+import Inert from '@hapi/inert'
 
 const exec = promisify(child_process.exec);
 
@@ -23,6 +24,8 @@ const init = async () => {
         port: PORT,
         host: '0.0.0.0'
     });
+
+    await server.register(Inert);
 
     server.route({
         method: 'GET',
