@@ -41,7 +41,7 @@ jobs:
           proxy_key: ${{ secrets.PROXY_KEY }}
           script: |
             git -C /app pull
-            npm ci
+            npm --prefix /app ci
             sudo cp -f /app/chicken-coop.service /lib/systemd/system/chicken-coop.service
             sudo systemctl daemon-reload
             sudo systemctl restart chicken-coop
