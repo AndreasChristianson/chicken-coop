@@ -1,0 +1,24 @@
+{
+  "name": "chicken-coop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo todo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/AndreasChristianson/chicken-coop.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreasChristianson/chicken-coop/issues"
+  },
+  "homepage": "https://github.com/AndreasChristianson/chicken-coop#readme",
+  "description": "",
+  "dependencies": {
+    "@hapi/hapi": "^21.4.0"
+  },
+  "type": "module"
+}

@@ -1,0 +1,14 @@
+[Unit]
+Description=chicken-coop.js
+Documentation=https://github.com/AndreasChristianson/chicken-coop#readme
+After=network.target
+
+[Service]
+Environment=PORT=80
+Type=simple
+User=sullage
+ExecStart=/usr/bin/node /app/index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
