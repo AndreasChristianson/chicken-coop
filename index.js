@@ -6,9 +6,9 @@ import fs from 'fs'
 
 const exec = promisify(child_process.exec);
 
-
 async function takePhoto() {
-    const filename = `${uuidv4()}.jpeg`
+    const filename = `/app/${uuidv4()}.jpeg`
+    console.log(`filename: ${filename}`);
     const {stdout, stderr} = await exec(`rpicam-still -o ${filename}`);
     console.log(`camera stdout: ${stdout}`);
     console.log(`camera stderr: ${stderr}`);
@@ -28,7 +28,7 @@ const init = async () => {
 
     server.route({
         method: 'GET',
-        path: '/snapshot',
+        path: '/snapshot.jpg',
         handler: async (request, h) => {
             return h.response(await takePhoto())
                 .type('image/jpeg')
