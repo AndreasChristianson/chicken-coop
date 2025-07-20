@@ -1,14 +1,15 @@
 import Hapi from '@hapi/hapi'
-import * as util from 'util';
-import exec from 'child_process';
+import { promisify } from 'node:util';
+import child_process from 'node:child_process';
 import {v4 as uuidv4} from 'uuid';
 import fs from 'fs'
 
-const execPromise = util.promisify(exec);
+const exec = promisify(child_process.exec);
+
 
 async function takePhoto() {
     const filename = `${uuidv4()}.jpeg`
-    const {stdout, stderr} = await execPromise(`rpicam-still -o ${filename}`);
+    const {stdout, stderr} = await exec(`rpicam-still -o ${filename}`);
     console.log(`camera stdout: ${stdout}`);
     console.log(`camera stderr: ${stderr}`);
 
