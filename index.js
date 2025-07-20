@@ -1,8 +1,7 @@
 import Hapi from '@hapi/hapi'
-import { promisify } from 'node:util';
+import {promisify} from 'node:util';
 import child_process from 'node:child_process';
 import {v4 as uuidv4} from 'uuid';
-import fs from 'fs'
 
 const exec = promisify(child_process.exec);
 
@@ -13,8 +12,7 @@ async function takePhoto() {
     console.log(`camera stdout: ${stdout}`);
     console.log(`camera stderr: ${stderr}`);
 
-    const data = await fs.promises.readFile(filename, "binary");
-    return Buffer.from(data);
+    return filename;
 }
 
 const PORT = process.env.PORT || 3000
@@ -30,8 +28,7 @@ const init = async () => {
         method: 'GET',
         path: '/snapshot.jpg',
         handler: async (request, h) => {
-            return h.response(await takePhoto())
-                .type('image/jpeg')
+            return h.file(await takePhoto())
         }
     });
 
