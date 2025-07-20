@@ -1,15 +1,19 @@
 import Hapi from '@hapi/hapi'
-import {StillCamera} from "pi-camera-connect";
+import * as util from 'util';
+import exec from 'child_process';
+import v4 from 'uuid';
+import fs from  'fs'
+
+const execPromise = util.promisify(exec);
 
 async function takePhoto() {
-    const camera = new StillCamera();
-    try {
-        const image = await camera.takeImage();
-        console.log('Photo taken');
-        return image;
-    } catch (error) {
-        console.error('Error taking photo:', error);
-    }
+    const filename = `${v4()}.jpeg`
+    const {stdout, stderr} = await execPromise(`rpicam-still -o ${filename}`);
+    console.log(`camera stdout: ${stdout}`);
+    console.log(`camera stderr: ${stderr}`);
+
+    const data = await fs.promises.readFile(filename, "binary");
+    return Buffer.from(data);
 }
 
 const PORT = process.env.PORT || 3000
@@ -25,7 +29,7 @@ const init = async () => {
         method: 'GET',
         path: '/snapshot',
         handler: async (request, h) => {
-            return h.response( await takePhoto())
+            return h.response(await takePhoto())
                 .type('image/jpeg')
         }
     });

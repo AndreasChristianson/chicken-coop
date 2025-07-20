@@ -19,7 +19,7 @@
   "description": "",
   "dependencies": {
     "@hapi/hapi": "^21.4.0",
-    "pi-camera-connect": "^0.3.4"
+    "uuid": "^11.1.0"
   },
   "type": "module"
 }
