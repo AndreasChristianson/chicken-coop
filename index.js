@@ -7,13 +7,18 @@ import Inert from '@hapi/inert'
 const exec = promisify(child_process.exec);
 
 async function takePhoto() {
-    const filename = `/app/${uuidv4()}.jpeg`
-    console.log(`filename: ${filename}`);
-    const {stdout, stderr} = await exec(`rpicam-still -o ${filename}`);
-    console.log(`camera stdout: ${stdout}`);
-    console.log(`camera stderr: ${stderr}`);
 
-    return filename;
+    try {
+        const filename = `/app/${uuidv4()}.jpeg`
+        console.log(`filename: ${filename}`);
+        const {stdout, stderr} = await exec(`rpicam-still -o ${filename}`);
+        console.log(`camera stdout: ${stdout}`);
+        console.log(`camera stderr: ${stderr}`);
+        return filename;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
 }
 
 const PORT = process.env.PORT || 3000
@@ -31,7 +36,11 @@ const init = async () => {
         method: 'GET',
         path: '/snapshot.jpg',
         handler: async (request, h) => {
-            return h.file(await takePhoto())
+            const snapshot = await takePhoto();
+            if (snapshot) {
+                return h.file(snapshot)
+            }
+            return h.response("Snapshot error. One in flight").code(503)
         }
     });
 
