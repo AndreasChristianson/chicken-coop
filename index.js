@@ -4,15 +4,7 @@ import child_process from 'node:child_process';
 import {v4 as uuidv4} from 'uuid';
 import Inert from '@hapi/inert'
 import {Mutex} from 'async-mutex';
-import fs from 'node:fs/promises';
-import convert from "convert";
-
-const thermistors = [
-    {path: '/sys/bus/w1/devices/28-00000037cd2f', name: "one"},
-    {path: '/sys/bus/w1/devices/28-0000005393bc', name: "two"},
-    {path: '/sys/bus/w1/devices/28-0000005668d0', name: "three"},
-    {path: '/sys/bus/w1/devices/28-000000bf3f2e', name: "four"},
-]
+import {readTemps} from "./src/temperature/index.js";
 
 const exec = promisify(child_process.exec);
 const mutex = new Mutex();
@@ -29,32 +21,6 @@ async function takePhoto() {
         console.log(error);
         return null;
     }
-}
-
-async function readTemp(path) {
-    try {
-        const data = await fs.readFile(`${path}/w1_slave`, {encoding: 'utf8'});
-        console.log(`raw data for ${path}:\n${data}`);
-        if (!/crc=.. YES/.test(data)) {
-            console.log(`${path}: no crc match`);
-            return null
-        }
-        const c = data.match(/.*t=(\d*)/)[1] / 1000;
-        console.log(`${path}: ${c}C`);
-        const f =  convert(c, "celsius").to("fahrenheit");
-        return `${f.toFixed(2)}f`
-    } catch (err) {
-        console.error(err);
-    }
-    return null;
-}
-
-async function readTemps() {
-    const promises = thermistors.map(async ({name, path}) => {
-        return {[name]: await readTemp(path)};
-    })
-
-    return await Promise.all(promises)
 }
 
 const PORT = process.env.PORT || 3000
