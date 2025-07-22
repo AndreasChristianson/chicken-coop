@@ -20,10 +20,15 @@ const readTemp = async (path) => {
     return null;
 }
 
-export const readTemps = async () => {
+const readTemps = async () => {
     const promises = thermistors.map(async ({name, path}) => {
         return {[name]: await readTemp(path)};
     })
 
     return await Promise.all(promises)
+}
+
+
+export const tempsHandler = async (request, h) => {
+    return h.response(await readTemps());
 }
