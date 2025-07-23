@@ -1,10 +1,10 @@
 import Hapi from '@hapi/hapi'
 import Inert from '@hapi/inert'
-import {tempsHandler} from "./temperature/index.js";
+import {tempHandler, tempsHandler} from "./temperature/index.js";
 import {snapshotHandler} from "./snapshots/index.js";
 import {PORT} from "./env.js";
 import "./handle-rejection.js";
-import {relayStatusHandler} from "./relays/index.js";
+import {relayStatusesHandler} from "./relays/index.js";
 
 export const init = async () => {
 
@@ -23,6 +23,12 @@ export const init = async () => {
 
     server.route({
         method: 'GET',
+        path: '/temps/{name}',
+        handler: tempHandler
+    });
+
+    server.route({
+        method: 'GET',
         path: '/temps',
         handler: tempsHandler
     });
@@ -30,7 +36,19 @@ export const init = async () => {
     server.route({
         method: 'GET',
         path: '/relays',
-        handler: relayStatusHandler
+        handler: relayStatusesHandler
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/relays/{name}',
+        handler: relayStatusesHandler
+    });
+
+    server.route({
+        method: 'PATCH',
+        path: '/relays/{name}',
+        handler: relayPatchHandler
     });
 
     await server.start();

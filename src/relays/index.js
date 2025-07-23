@@ -6,20 +6,60 @@ const statusMap = {
     [Gpio.LOW]: "off"
 }
 
-const getStatus = async (gpio) => {
-    const status = await gpio.read()
-    return statusMap[status];
+const reverseStatusMap = {
+    "on": Gpio.HIGH,
+    "off": Gpio.LOW
 }
 
-const getStatuses = async () => {
-    const promises = relays
-        .map(async ({gpio, name}) => ({
-            [name]: await getStatus(gpio)
-        }))
+const getRelay = async (name) => {
+    const {relay, pin} = relays[name];
+    const status = statusMap[await relay.read()];
+    return {
+        status,
+        pin,
+        name
+    }
+}
+
+const setRelay = async (name, newStatus) => {
+    const {relay} = relays[name];
+    await relay.write(newStatus);
+}
+
+const getRelays = async () => {
+    const promises = Object.keys(relays)
+        .map(getRelay)
 
     return Promise.all(promises);
 }
 
+export const relayStatusesHandler = async (request, h) => {
+    return h.response(await getRelays());
+}
+
 export const relayStatusHandler = async (request, h) => {
-    return h.response(await getStatuses());
+    return h.response(await getRelay(request.params.name));
+}
+
+export const relayPatchHandler = async (request, h) => {
+    try {
+        if (!relays[request.params.name]) {
+            return h.status(404);
+        }
+        const body = JSON.parse(request.body);
+        if (!body) {
+            return h.status(400);
+        }
+        const newStatus = reverseStatusMap[body.status];
+        if (!newStatus) {
+            return h.status(400);
+        }
+        await setRelay(request.params.name, newStatus);
+        return h
+            .response(await getRelay(request.params.name))
+            .status(202);
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
 }

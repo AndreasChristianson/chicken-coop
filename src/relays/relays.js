@@ -56,13 +56,13 @@ gpiochip0: GPIOs 512-565, parent: platform/20200000.gpio, pinctrl-bcm2835:
  gpio-564 (SD_DATA2_R          )
  gpio-565 (SD_DATA3_R          )
  */
-const relays = [
-    {gpio: new Gpio(535, "out"), name: "light socket"},
-    {gpio: new Gpio(536, "out"), name: "outlet"},
-]
+const relays = {
+    "light": {pin: 23, relay: new Gpio(535, "out")},
+    "outlet": {pin: 24, relay: new Gpio(536, "out")},
+}
 
 process.on('SIGINT', _ => {
-    relays.map(({gpio}) => gpio.unexport());
+    Object.keys(relays).map(name => relays[name].relay.unexport());
 });
 
 export default relays;
