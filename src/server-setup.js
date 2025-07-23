@@ -4,7 +4,7 @@ import {tempHandler, tempsHandler} from "./temperature/index.js";
 import {snapshotHandler} from "./snapshots/index.js";
 import {PORT} from "./env.js";
 import "./handle-rejection.js";
-import {relayStatusesHandler} from "./relays/index.js";
+import {relayPatchHandler, relayStatusesHandler, relayStatusHandler} from "./relays/index.js";
 
 export const init = async () => {
 
@@ -36,7 +36,7 @@ export const init = async () => {
     server.route({
         method: 'GET',
         path: '/relays',
-        handler: relayStatusesHandler
+        handler: relayStatusHandler
     });
 
     server.route({
