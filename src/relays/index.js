@@ -46,7 +46,8 @@ export const relayPatchHandler = async (request, h) => {
         if (!relays[request.params.name]) {
             return h.status(404);
         }
-        const body = JSON.parse(request.body);
+        console.log(request.payload)
+        const body = request.payload;
         if (!body) {
             return h.status(400);
         }
