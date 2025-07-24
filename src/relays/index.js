@@ -58,7 +58,7 @@ export const relayPatchHandler = async (request, h) => {
         await setRelay(request.params.name, newStatus);
         return h
             .response(await getRelay(request.params.name))
-            .status(202);
+            .code(202);
     } catch (err) {
         console.error(err);
         throw err;
