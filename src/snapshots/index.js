@@ -9,7 +9,7 @@ const mutex = new Mutex();
 const takePhoto = async () => {
     const filename = `/app/${uuidv4()}.jpeg`
     console.log(`filename: ${filename}`);
-    const {stdout, stderr} = await mutex.runExclusive(async () => await exec(`rpicam-still -o ${filename}`));
+    const {stdout, stderr} = await mutex.runExclusive(async () => await exec(`rpicam-still --rotation 90 -o ${filename}`));
     console.log(`camera stdout: ${stdout}`);
     console.log(`camera stderr: ${stderr}`);
     return filename;
