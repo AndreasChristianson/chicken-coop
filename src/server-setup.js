@@ -36,13 +36,13 @@ export const init = async () => {
     server.route({
         method: 'GET',
         path: '/relays',
-        handler: relayStatusHandler
+        handler: relayStatusesHandler
     });
 
     server.route({
         method: 'GET',
         path: '/relays/{name}',
-        handler: relayStatusesHandler
+        handler: relayStatusHandler
     });
 
     server.route({
