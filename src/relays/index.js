@@ -44,16 +44,16 @@ export const relayStatusHandler = async (request, h) => {
 export const relayPatchHandler = async (request, h) => {
     try {
         if (!relays[request.params.name]) {
-            return h.status(404);
+            return h.code(404);
         }
         console.log(request.payload)
         const body = request.payload;
         if (!body) {
-            return h.status(400);
+            return h.code(400);
         }
         const newStatus = reverseStatusMap[body.status];
         if (!newStatus) {
-            return h.status(400);
+            return h.code(400);
         }
         await setRelay(request.params.name, newStatus);
         return h

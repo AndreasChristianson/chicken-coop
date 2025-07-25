@@ -17,37 +17,37 @@ export const init = async () => {
 
     server.route({
         method: 'GET',
-        path: '/snapshot.jpg',
+        path: '/api/snapshot.jpg',
         handler: snapshotHandler
     });
 
     server.route({
         method: 'GET',
-        path: '/temps/{name}',
+        path: '/api/temps/{name}',
         handler: tempHandler
     });
 
     server.route({
         method: 'GET',
-        path: '/temps',
+        path: '/api/temps',
         handler: tempsHandler
     });
 
     server.route({
         method: 'GET',
-        path: '/relays',
+        path: '/api/relays',
         handler: relayStatusesHandler
     });
 
     server.route({
         method: 'GET',
-        path: '/relays/{name}',
+        path: '/api/relays/{name}',
         handler: relayStatusHandler
     });
 
     server.route({
         method: 'PATCH',
-        path: '/relays/{name}',
+        path: '/api/relays/{name}',
         handler: relayPatchHandler
     });
 
