@@ -22,6 +22,7 @@ const getRelay = async (name) => {
 }
 
 const setRelay = async (name, newStatus) => {
+    console.log("setRelay", name, newStatus)
     const {relay} = relays[name];
     await relay.write(newStatus);
 }
