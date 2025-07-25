@@ -4,7 +4,7 @@ import thermistors from "./thermistors.js";
 import Boom from "@hapi/boom";
 
 const readTemp = async (name) => {
-    if(!thermistors[name]) {
+    if (!thermistors[name]) {
         throw Boom.notFound(name);
     }
     const {path} = thermistors[name];
@@ -35,17 +35,13 @@ const readTemp = async (name) => {
 
 }
 
-const readTemps = async () => {
+export const tempsHandler = async (request, h) => {
     const promises = Object.keys(thermistors)
         .map(readTemp);
 
-    return Promise.all(promises)
+    return h.response(await Promise.all(promises));
 }
 
-export const tempsHandler = (request, h) => {
-    return h.response(readTemps());
-}
-
-export const tempHandler = (request, h) => {
-    return h.response(readTemp(request.params.name));
+export const tempHandler = async (request, h) => {
+    return h.response(await readTemp(request.params.name));
 }

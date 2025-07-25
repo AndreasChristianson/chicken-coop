@@ -18,12 +18,17 @@ const getRelay = async (name) => {
         throw Boom.notFound(name)
     }
     const {relay, pin} = foundRelay;
-    const status = statusMap[await relay.read()];
-    return {
-        status,
-        pin,
-        name
+    try {
+        const status = statusMap[await relay.read()];
+        return {
+            status,
+            pin,
+            name
+        }
+    } catch (err) {
+        throw Boom.badImplementation(err);
     }
+
 }
 
 const setRelay = async (name, status) => {
@@ -38,18 +43,22 @@ const setRelay = async (name, status) => {
         throw new Boom.badRequest(status)
     }
 
-    await relay.write(newStatus);
+    try {
+        await relay.write(newStatus);
+    } catch (err) {
+        throw Boom.badImplementation(err);
+    }
 }
 
-export const relayStatusesHandler = (request, h) => {
+export const relayStatusesHandler = async (request, h) => {
     const promises = Object.keys(relays)
         .map(getRelay)
 
-    return h.response(Promise.all(promises));
+    return h.response(await Promise.all(promises));
 }
 
-export const relayStatusHandler = (request, h) => {
-    return h.response(getRelay(request.params.name));
+export const relayStatusHandler = async (request, h) => {
+    return h.response(await getRelay(request.params.name));
 }
 
 export const relayPatchHandler = async (request, h) => {
