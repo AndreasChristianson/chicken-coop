@@ -13,11 +13,10 @@ const reverseStatusMap = {
 }
 
 const getRelay = async (name) => {
-    const foundRelay = relays[name];
-    if (!foundRelay) {
+    if (!name in relays) {
         throw Boom.notFound(name)
     }
-    const {relay, pin} = foundRelay;
+    const {relay, pin} = relays[name];;
     try {
         const status = statusMap[await relay.read()];
         return {
@@ -32,16 +31,16 @@ const getRelay = async (name) => {
 }
 
 const setRelay = async (name, status) => {
-    const foundRelay = relays[name];
-    if (!foundRelay) {
+    if (!name in relays) {
         throw Boom.notFound(name)
     }
-    const {relay} = foundRelay;
+    const {relay} = relays[name];
 
-    const newStatus = reverseStatusMap[status];
-    if (!newStatus) {
+
+    if (!status in reverseStatusMap) {
         throw new Boom.badRequest(status)
     }
+    const newStatus = reverseStatusMap[status];
 
     try {
         await relay.write(newStatus);
@@ -62,9 +61,6 @@ export const relayStatusHandler = async (request, h) => {
 }
 
 export const relayPatchHandler = async (request, h) => {
-    if (!relays[request.params.name]) {
-        throw Boom.notFound(request.params.name);
-    }
     const body = request.payload;
     if (!body) {
         throw Boom.badRequest("no body");

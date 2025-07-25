@@ -4,7 +4,7 @@ import thermistors from "./thermistors.js";
 import Boom from "@hapi/boom";
 
 const readTemp = async (name) => {
-    if (!thermistors[name]) {
+    if (!name in thermistors) {
         throw Boom.notFound(name);
     }
     const {path} = thermistors[name];
