@@ -26,19 +26,18 @@ const setRelay = async (name, newStatus) => {
     await relay.write(newStatus);
 }
 
-const getRelays = async () => {
+export const relayStatusesHandler = (request, h) => {
     const promises = Object.keys(relays)
         .map(getRelay)
 
-    return Promise.all(promises);
+    return h.response(Promise.all(promises));
 }
 
-export const relayStatusesHandler = async (request, h) => {
-    return h.response(await getRelays());
-}
-
-export const relayStatusHandler = async (request, h) => {
-    return h.response(await getRelay(request.params.name));
+export const relayStatusHandler = (request, h) => {
+    if(!relays[request.params.name]){
+        return h.code(404);
+    }
+    return h.response(getRelay(request.params.name));
 }
 
 export const relayPatchHandler = async (request, h) => {

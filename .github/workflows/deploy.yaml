@@ -27,6 +27,7 @@ jobs:
       - run: >
           npm run test
   deploy:
+    concurrency: ssh-deploy
     runs-on: ubuntu-latest
     needs: build
     steps:
