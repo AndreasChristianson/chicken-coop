@@ -7,7 +7,7 @@ After=network.target
 Environment=PORT=80
 Type=simple
 User=root
-ExecStart=/usr/bin/node /app/index.js
+ExecStart=/usr/bin/node /app/server/index.js
 Restart=on-failure
 
 [Install]

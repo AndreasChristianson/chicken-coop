@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 18
       - run: >
-          npm run test
+          npm --prefix server run test
   deploy:
     concurrency: ssh-deploy
     runs-on: ubuntu-latest
@@ -43,7 +43,7 @@ jobs:
           script: |
             git -C /app fetch
             git -C /app reset --hard origin/main
-            npm --prefix /app ci
+            npm --prefix /app/server ci
             sudo cp -f /app/chicken-coop.service /lib/systemd/system/chicken-coop.service
             sudo systemctl daemon-reload
             sudo systemctl restart chicken-coop
