@@ -3,6 +3,7 @@ import child_process from 'node:child_process';
 import {v4 as uuidv4} from 'uuid';
 import {Mutex} from 'async-mutex';
 import sharp from 'sharp'
+import fs from "node:fs/promises";
 
 const exec = promisify(child_process.exec);
 const mutex = new Mutex();
@@ -18,6 +19,11 @@ const takePhoto = async () => {
     await sharp(filename)
         .rotate(90)
         .toFile(rotatedFilename);
+    //clean up after 5 mins
+    setTimeout(async () => {
+        await fs.unlink(filename);
+        await fs.unlink(rotatedFilename);
+    }, 5*60*1000)
     return rotatedFilename;
 }
 
