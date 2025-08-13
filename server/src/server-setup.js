@@ -8,6 +8,7 @@ import {relayPatchHandler, relayStatusesHandler, relayStatusHandler} from "./rel
 import * as Path from "node:path";
 
 export const init = async () => {
+    console.log("Initializing from directory ", process.cwd());
 
     const server = Hapi.server({
         port: PORT,
