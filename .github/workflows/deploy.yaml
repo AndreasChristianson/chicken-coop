@@ -60,8 +60,8 @@ jobs:
           proxy_host: glowbox.pessimistic-it.com
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
-          source: "client/build"
-          target: "/app/client/build"
+          source: "client/build/"
+          target: "/app/client/build/"
       - name: build
         uses: appleboy/scp-action@v1
         with:
@@ -71,8 +71,8 @@ jobs:
           proxy_host: glowbox.pessimistic-it.com
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
-          source: "server"
-          target: "/app/server"
+          source: "server/"
+          target: "/app/server/"
       - name: build
         uses: appleboy/scp-action@v1
         with:
@@ -83,7 +83,7 @@ jobs:
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
           source: "chicken-coop.service"
-          target: "/app/chicken-coop.service"
+          target: "/app/"
       - name: build
         uses: appleboy/ssh-action@v1
         with:
