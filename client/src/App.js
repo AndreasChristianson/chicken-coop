@@ -32,7 +32,7 @@ function Temps() {
                 ? <Spinner/>
                 : <ul>
                     {temps.map((item) => (
-                        <li>{item.name}: {item.f}</li>
+                        <li>{item.name}: {item.f} °F</li>
                     ))}
                 </ul>
             }
@@ -41,11 +41,55 @@ function Temps() {
 }
 
 function Relays() {
-    return null;
+    const [relays, setRelays] = useState([])
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await fetch(apiUrl + "/relays");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                setRelays(result);
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, []);
+    return (
+        <div className="relays">
+            <h2>Relays</h2>
+            {loading
+                ? <Spinner/>
+                : <ul>
+                    {relays.map((item) => (
+                        <li>{item.name}: {item.status}</li>
+                    ))}
+                </ul>
+            }
+        </div>
+    );
 }
 
 function Snapshot() {
-    return null;
+    const [loading, setLoading] = useState(true);
+    const handleImageLoaded = () => {
+        setLoading(false);
+    }
+    const imageStyle = loading ? {display: "none"} : {};
+    return (
+        <div className="imageHolder">
+            {loading && <img src={logo} className="App-logo" alt={'loading snapshot'}/>}
+            <img
+                src={apiUrl + "/snapshot.jpg"}
+                onLoad={handleImageLoaded}
+                style={imageStyle}
+                className="App-logo"
+                alt={'happy chickens'}
+            />
+        </div>
+    )
 }
 
 function App() {
@@ -53,10 +97,9 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <h1>Chicken Coop</h1>
-                <img src={logo} className="App-logo" alt="logo"/>
+                <Snapshot/>
                 <Temps/>
                 <Relays/>
-                <Snapshot/>
             </header>
         </div>
     )
