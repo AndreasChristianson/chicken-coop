@@ -34,11 +34,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
       - run: >
-          npm --prefix client ci --os=linux --cpu=arm
+          npm --prefix client ci
       - run: >
           npm --prefix client run build
       - run: >
-          npm --prefix server ci
+          npm --prefix server ci --os=linux --cpu=arm
       - name: stop service
         uses: appleboy/ssh-action@v1
         with:
