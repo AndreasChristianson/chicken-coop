@@ -11,15 +11,19 @@ function Spinner() {
 function Temps() {
     const [temps, setTemps] = useState([])
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     useEffect(() => {
         (async () => {
             try {
                 const response = await fetch(apiUrl + "/temps");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    setTemps(result);
+                } else {
+                    setError("non 200 status: " + response.status)
                 }
-                const result = await response.json();
-                setTemps(result);
+            } catch (err) {
+                setError(err)
             } finally {
                 setLoading(false);
             }
@@ -27,7 +31,9 @@ function Temps() {
     }, []);
     return (
         <div className="temps">
+
             <h2>Temps</h2>
+            <span>{error}</span>
             {loading
                 ? <Spinner/>
                 : <ul>
@@ -43,15 +49,20 @@ function Temps() {
 function Relays() {
     const [relays, setRelays] = useState([])
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     useEffect(() => {
         (async () => {
             try {
                 const response = await fetch(apiUrl + "/relays");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (response.ok) {
+                    const result = await response.json();
+                    setRelays(result);
+                } else {
+                    setError("non 200 status: " + response.status)
                 }
-                const result = await response.json();
-                setRelays(result);
+            } catch (err) {
+                setError(err)
             } finally {
                 setLoading(false);
             }
@@ -60,6 +71,7 @@ function Relays() {
     return (
         <div className="relays">
             <h2>Relays</h2>
+            <span>{error}</span>
             {loading
                 ? <Spinner/>
                 : <ul>
