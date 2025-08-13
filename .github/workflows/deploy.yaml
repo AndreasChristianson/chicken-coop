@@ -31,6 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: >
+          npm --prefix client ci
+      - run: >
+          npm --prefix client run build
+      - run: >
+          npm --prefix server ci
       - name: build
         uses: appleboy/ssh-action@v1
         with:
@@ -41,11 +49,51 @@ jobs:
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
           script: |
-            git -C /app fetch
-            git -C /app reset --hard origin/main
-            npm --prefix /app/server ci
-            npm --prefix /app/client ci
-            npm --prefix /app/client run build
+            sudo systemctl stop chicken-coop
+            rm -rf /app/*
+      - name: build
+        uses: appleboy/scp-action@v1
+        with:
+          host: chicken-coop
+          username: sullage
+          key: ${{ secrets.COOP_KEY }}
+          proxy_host: glowbox.pessimistic-it.com
+          proxy_username: sullage
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          source: "client/build"
+          target: "/app/client/build"
+      - name: build
+        uses: appleboy/scp-action@v1
+        with:
+          host: chicken-coop
+          username: sullage
+          key: ${{ secrets.COOP_KEY }}
+          proxy_host: glowbox.pessimistic-it.com
+          proxy_username: sullage
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          source: "server"
+          target: "/app/server"
+      - name: build
+        uses: appleboy/scp-action@v1
+        with:
+          host: chicken-coop
+          username: sullage
+          key: ${{ secrets.COOP_KEY }}
+          proxy_host: glowbox.pessimistic-it.com
+          proxy_username: sullage
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          source: "chicken-coop.service"
+          target: "/app/chicken-coop.service"
+      - name: build
+        uses: appleboy/ssh-action@v1
+        with:
+          host: chicken-coop
+          username: sullage
+          key: ${{ secrets.COOP_KEY }}
+          proxy_host: glowbox.pessimistic-it.com
+          proxy_username: sullage
+          proxy_key: ${{ secrets.PROXY_KEY }}
+          script: |
             sudo cp -f /app/chicken-coop.service /lib/systemd/system/chicken-coop.service
             sudo systemctl daemon-reload
             sudo systemctl restart chicken-coop
