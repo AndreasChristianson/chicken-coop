@@ -38,7 +38,7 @@ jobs:
       - run: >
           npm --prefix client run build
       - run: >
-          npm --prefix server ci --os=linux --cpu=arm32
+          npm --prefix server install --include=optional --os=linux --cpu=arm
       - name: stop service
         uses: appleboy/ssh-action@v1
         with:
