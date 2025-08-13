@@ -37,8 +37,6 @@ jobs:
           npm --prefix client ci
       - run: >
           npm --prefix client run build
-      - run: >
-          npm --prefix server install --include=optional --os=linux --cpu=arm
       - name: stop service
         uses: appleboy/ssh-action@v1
         with:
@@ -94,6 +92,7 @@ jobs:
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
           script: |
+            npm --prefix /app/server ci 
             sudo cp -f /app/chicken-coop.service /lib/systemd/system/chicken-coop.service
             sudo systemctl daemon-reload
             sudo systemctl start chicken-coop
