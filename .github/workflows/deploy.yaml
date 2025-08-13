@@ -37,6 +37,8 @@ jobs:
           npm --prefix client ci
       - run: >
           npm --prefix client run build
+        env:
+          REACT_APP_API_URL: http://chicken-coop/api
       - name: stop service
         uses: appleboy/ssh-action@v1
         with:

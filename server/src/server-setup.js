@@ -12,7 +12,12 @@ export const init = async () => {
 
     const server = Hapi.server({
         port: PORT,
-        host: '0.0.0.0'
+        host: '0.0.0.0',
+        routes: {
+            cors: {
+                origin: ['http://localhost:3000', 'https://chicken-coop']
+            }
+        }
     });
 
     await server.register(Inert);
