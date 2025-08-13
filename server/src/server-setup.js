@@ -58,7 +58,7 @@ export const init = async () => {
         path: '/{path*}',
         handler: {
             directory: {
-                path: Path.join(process.cwd(), '../client/build/'),
+                path: Path.join(process.cwd(), 'client/build/'),
                 listing: false,
                 index: true
             }

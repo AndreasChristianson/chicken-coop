@@ -8,6 +8,7 @@ Environment=PORT=80
 Type=simple
 User=root
 ExecStart=/usr/bin/node /app/server/index.js
+WorkingDirectory=/app/
 Restart=on-failure
 
 [Install]
