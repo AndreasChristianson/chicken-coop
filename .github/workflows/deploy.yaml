@@ -39,7 +39,7 @@ jobs:
           npm --prefix client run build
       - run: >
           npm --prefix server ci
-      - name: build
+      - name: stop service
         uses: appleboy/ssh-action@v1
         with:
           host: chicken-coop
@@ -51,7 +51,7 @@ jobs:
           script: |
             sudo systemctl stop chicken-coop
             rm -rf /app/*
-      - name: build
+      - name: copy client build
         uses: appleboy/scp-action@v1
         with:
           host: chicken-coop
@@ -60,9 +60,9 @@ jobs:
           proxy_host: glowbox.pessimistic-it.com
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
-          source: "client/build/"
+          source: "client/build/*"
           target: "/app/client/build/"
-      - name: build
+      - name: copy server
         uses: appleboy/scp-action@v1
         with:
           host: chicken-coop
@@ -71,9 +71,9 @@ jobs:
           proxy_host: glowbox.pessimistic-it.com
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
-          source: "server/"
+          source: "server/*"
           target: "/app/server/"
-      - name: build
+      - name: copy service def
         uses: appleboy/scp-action@v1
         with:
           host: chicken-coop
@@ -84,7 +84,7 @@ jobs:
           proxy_key: ${{ secrets.PROXY_KEY }}
           source: "chicken-coop.service"
           target: "/app/"
-      - name: build
+      - name: start service
         uses: appleboy/ssh-action@v1
         with:
           host: chicken-coop
