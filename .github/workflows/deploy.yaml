@@ -61,7 +61,7 @@ jobs:
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
           source: "client/build/*"
-          target: "/app/client/build/"
+          target: "/app/"
       - name: copy server
         uses: appleboy/scp-action@v1
         with:
@@ -72,7 +72,7 @@ jobs:
           proxy_username: sullage
           proxy_key: ${{ secrets.PROXY_KEY }}
           source: "server/*"
-          target: "/app/server/"
+          target: "/app"
       - name: copy service def
         uses: appleboy/scp-action@v1
         with:
