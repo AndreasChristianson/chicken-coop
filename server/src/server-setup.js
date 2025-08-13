@@ -5,8 +5,7 @@ import {snapshotHandler} from "./snapshots/index.js";
 import {PORT} from "./env.js";
 import "./handle-rejection.js";
 import {relayPatchHandler, relayStatusesHandler, relayStatusHandler} from "./relays/index.js";
-import Vision from '@hapi/vision';
-import hbs from 'hbs';
+import * as Path from "node:path";
 
 export const init = async () => {
 
@@ -16,16 +15,6 @@ export const init = async () => {
     });
 
     await server.register(Inert);
-    await server.register(Vision);
-
-    server.views({
-        engines: {
-            html: hbs
-        },
-        relativeTo: __dirname,
-        path: 'templates'
-    });
-
 
     server.route({
         method: 'GET',
@@ -61,6 +50,18 @@ export const init = async () => {
         method: 'PATCH',
         path: '/api/relays/{name}',
         handler: relayPatchHandler
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/{path*}',
+        handler: {
+            directory: {
+                path: Path.join(process.cwd(), '../client/build/'),
+                listing: false,
+                index: true
+            }
+        }
     });
 
     await server.start();

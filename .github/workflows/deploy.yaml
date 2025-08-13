@@ -44,6 +44,8 @@ jobs:
             git -C /app fetch
             git -C /app reset --hard origin/main
             npm --prefix /app/server ci
+            npm --prefix /app/client ci
+            npm --prefix /app/client run build
             sudo cp -f /app/chicken-coop.service /lib/systemd/system/chicken-coop.service
             sudo systemctl daemon-reload
             sudo systemctl restart chicken-coop
