@@ -27,7 +27,7 @@ function Temps() {
     return (
         <div className="temps">
 
-            <h2>Temps</h2>
+            <h2>Temps (<a href="https://grafana.pessimistic-it.com/d/nw44MPkDk">History</a>)</h2>
             <span>{error}</span>
             {loading
                 ? <Spinner/>
