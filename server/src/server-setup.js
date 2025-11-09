@@ -6,6 +6,7 @@ import {PORT} from "./env.js";
 import "./handle-rejection.js";
 import {relayPatchHandler, relayStatusesHandler, relayStatusHandler} from "./relays/index.js";
 import * as Path from "node:path";
+import {promHandler} from "./prometheus/index.js";
 
 export const init = async () => {
     console.log("Initializing from directory ", process.cwd());
@@ -38,6 +39,12 @@ export const init = async () => {
         method: 'GET',
         path: '/api/temps',
         handler: tempsHandler
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/prometheus',
+        handler: promHandler
     });
 
     server.route({

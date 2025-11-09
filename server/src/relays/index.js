@@ -49,11 +49,15 @@ const setRelay = async (name, status) => {
     }
 }
 
-export const relayStatusesHandler = async (request, h) => {
+export const readRelays = async () => {
     const promises = Object.keys(relays)
         .map(getRelay)
 
-    return h.response(await Promise.all(promises));
+    return await Promise.all(promises);
+}
+
+export const relayStatusesHandler = async (request, h) => {
+    return h.response(await readRelays());
 }
 
 export const relayStatusHandler = async (request, h) => {

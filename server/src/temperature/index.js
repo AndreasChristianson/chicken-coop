@@ -35,11 +35,15 @@ const readTemp = async (name) => {
 
 }
 
-export const tempsHandler = async (request, h) => {
+export const readTemps = async () => {
     const promises = Object.keys(thermistors)
         .map(readTemp);
 
-    return h.response(await Promise.all(promises));
+    return await Promise.all(promises);
+}
+
+export const tempsHandler = async (request, h) => {
+    return h.response(await readTemps());
 }
 
 export const tempHandler = async (request, h) => {
