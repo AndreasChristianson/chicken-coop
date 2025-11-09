@@ -7,11 +7,10 @@ function Relays() {
     const [relays, setRelays] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [changed, setChanged] = useState(false);
+    const [changed, setChanged] = useState(0);
 
 
-
-    useEffect(()=>{
+    useEffect(() => {
         const fetchRelays = async () => {
             setLoading(true);
             try {
@@ -30,12 +29,12 @@ function Relays() {
             }
         }
         fetchRelays();
-        return () => {}
     }, [changed]);
 
     const toggle = item => async () => {
+        setLoading(true);
         const response = await fetch(
-            apiUrl + "/relays/"+item.name,
+            apiUrl + "/relays/" + item.name,
             {
                 method: "PATCH",
                 body: JSON.stringify({
@@ -44,7 +43,8 @@ function Relays() {
             }
         );
         console.log(response)
-        setChanged(true)
+        console.log(await response.json())
+        setChanged(changed + 1)
     }
 
     return (
