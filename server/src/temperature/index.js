@@ -21,7 +21,7 @@ const readTemp = async (name) => {
             c: null,
         }
     }
-    const c = data.match(/.*t=(\d*)/)[1] / 1000;
+    const c = data.match(/.*t=(-?\d*)/)[1] / 1000;
     console.log(`${path}: ${c}C`);
     const f = convert(c, "celsius").to("fahrenheit");
     return {
