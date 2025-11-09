@@ -37,6 +37,9 @@ function Relays() {
             apiUrl + "/relays/" + item.name,
             {
                 method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify({
                     status: item.status === "off" ? "on" : "off"
                 }),
@@ -55,7 +58,7 @@ function Relays() {
                 ? <Spinner/>
                 : <ul>
                     {relays.map((item) => (
-                        <li>{item.name}: <button onClick={toggle(item)}>{item.status}</button></li>
+                        <li>{item.name}: {item.status} <button onClick={toggle(item)}>toggle</button></li>
                     ))}
                 </ul>
             }
