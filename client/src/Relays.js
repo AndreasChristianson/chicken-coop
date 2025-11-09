@@ -7,9 +7,13 @@ function Relays() {
     const [relays, setRelays] = useState([])
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [changed, setChanged] = useState(false);
 
-    useEffect(() => {
-        (async () => {
+
+
+    useEffect(()=>{
+        const fetchRelays = async () => {
+            setLoading(true);
             try {
                 const response = await fetch(apiUrl + "/relays");
                 if (response.ok) {
@@ -22,9 +26,27 @@ function Relays() {
                 setError(err)
             } finally {
                 setLoading(false);
+                setChanged(false)
             }
-        })();
-    }, []);
+        }
+        fetchRelays();
+        return () => {}
+    }, [changed]);
+
+    const toggle = item => async () => {
+        const response = await fetch(
+            apiUrl + "/relays",
+            {
+                method: "PATCH",
+                body: JSON.stringify({
+                    status: item.status === "off" ? "on" : "off"
+                }),
+            }
+        );
+        console.log(response)
+        setChanged(true)
+    }
+
     return (
         <div className="relays">
             <h2>Relays</h2>
@@ -33,7 +55,7 @@ function Relays() {
                 ? <Spinner/>
                 : <ul>
                     {relays.map((item) => (
-                        <li>{item.name}: {item.status}</li>
+                        <li>{item.name}: <button onClick={toggle(item)}>{item.status}</button></li>
                     ))}
                 </ul>
             }
