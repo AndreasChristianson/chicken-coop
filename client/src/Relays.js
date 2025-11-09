@@ -35,7 +35,7 @@ function Relays() {
 
     const toggle = item => async () => {
         const response = await fetch(
-            apiUrl + "/relays",
+            apiUrl + "/relays/"+item.name,
             {
                 method: "PATCH",
                 body: JSON.stringify({
