@@ -25,7 +25,6 @@ function Relays() {
                 setError(err)
             } finally {
                 setLoading(false);
-                setChanged(false)
             }
         }
         fetchRelays();
