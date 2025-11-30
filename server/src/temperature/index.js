@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import convert from "convert";
 import thermistors from "./thermistors.js";
 import Boom from "@hapi/boom";
+import {promiseTimeout} from "../promise-utils.js";
 
 const readTemp = async (name) => {
     if (!name in thermistors) {
@@ -37,9 +38,19 @@ const readTemp = async (name) => {
 
 export const readTemps = async () => {
     const promises = Object.keys(thermistors)
-        .map(readTemp);
+        .map(readTemp)
+        .map(promise => promiseTimeout(promise, 5000));
+    
+    const results=[];
+    for (const promise of promises) {
+        try {
+            results.push(await promise)
+        }catch (error){
+            console.log(error)
+        }
+    }
 
-    return await Promise.all(promises);
+    return results;
 }
 
 export const tempsHandler = async (request, h) => {
