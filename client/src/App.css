@@ -44,3 +44,54 @@
     transform: rotate(360deg);
   }
 }
+
+/* Relays UI styles */
+.relays {
+  margin: 1rem;
+  width: 100%;
+  max-width: 720px;
+}
+
+.relay-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+  justify-content: space-between;
+}
+
+.relay-row .status {
+  min-width: 72px;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.relay-toggle {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.05s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.relay-toggle:active { transform: translateY(1px); }
+
+.relay-toggle.on {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.relay-toggle.off {
+  background-color: #bbbbbb;
+  color: #222;
+}
+
+@media (max-width: 480px) {
+  .relay-toggle {
+    padding: 14px 24px;
+    font-size: 1.1rem;
+    border-radius: 14px;
+  }
+}

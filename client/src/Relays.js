@@ -57,7 +57,7 @@ function Relays() {
                 ? <Spinner/>
                 : <ul>
                     {relays.map((item) => (
-                        <li>{item.name}: {item.status} <button onClick={toggle(item)}>toggle</button></li>
+                        <li key={item.name} className="relay-row">{item.name}: <span className={`status ${item.status}`}>{item.status}</span> <button className={`relay-toggle ${item.status}`} onClick={toggle(item)}>{item.status === "on" ? "Turn off" : "Turn on"}</button></li>
                     ))}
                 </ul>
             }
