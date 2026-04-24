@@ -4,10 +4,27 @@ import thermistors from "./thermistors.js";
 import Boom from "@hapi/boom";
 import {promiseTimeout} from "../promise-utils.js";
 
+import {MOCK_HARDWARE} from '../hardware.js';
+
 const readTemp = async (name) => {
     if (!name in thermistors) {
         throw Boom.notFound(name);
     }
+
+    if (MOCK_HARDWARE) {
+        // return a realistic-looking mock temperature
+        const c = 20 + Math.random() * 10; // 20-30C
+        const f = convert(c, "celsius").to("fahrenheit");
+        return {
+            name,
+            path: null,
+            data: null,
+            crcPass: true,
+            f: f.toFixed(2),
+            c: c.toFixed(2)
+        }
+    }
+
     const {path} = thermistors[name];
     const data = await fs.readFile(`${path}/w1_slave`, {encoding: 'utf8'});
     console.log(`raw data for ${path}:\n${data}`);

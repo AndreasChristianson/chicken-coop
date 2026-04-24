@@ -56,13 +56,31 @@ gpiochip0: GPIOs 512-565, parent: platform/20200000.gpio, pinctrl-bcm2835:
  gpio-564 (SD_DATA2_R          )
  gpio-565 (SD_DATA3_R          )
  */
-const relays = {
-    "light": {pin: 23, relay: new Gpio(535, "out")},
-    "outlet": {pin: 24, relay: new Gpio(536, "out")},
+
+import {MOCK_HARDWARE} from '../hardware.js';
+
+function createMockRelay(initial = 0) {
+    let state = initial;
+    return {
+        read: async () => state,
+        write: async (val) => { state = val; },
+        unexport: () => {}
+    }
+}
+
+const relays = MOCK_HARDWARE ? {
+    "light": {pin: 23, relay: createMockRelay(0)},
+    "outlet": {pin: 24, relay: createMockRelay(0)}
+} : {
+    // "light": {pin: 23, relay: new Gpio(535, "out")},
+    // "outlet": {pin: 24, relay: new Gpio(536, "out")},
 }
 
 process.on('SIGINT', _ => {
-    Object.keys(relays).map(name => relays[name].relay.unexport());
+    Object.keys(relays).map(name => {
+        const r = relays[name].relay;
+        if (r && typeof r.unexport === 'function') r.unexport();
+    });
 });
 
 export default relays;
