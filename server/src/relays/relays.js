@@ -72,8 +72,8 @@ const relays = MOCK_HARDWARE ? {
     "light": {pin: 23, relay: createMockRelay(0)},
     "outlet": {pin: 24, relay: createMockRelay(0)}
 } : {
-    // "light": {pin: 23, relay: new Gpio(535, "out")},
-    // "outlet": {pin: 24, relay: new Gpio(536, "out")},
+    "light": {pin: 23, relay: new Gpio(535, "out")},
+    "outlet": {pin: 24, relay: new Gpio(536, "out")},
 }
 
 process.on('SIGINT', _ => {
