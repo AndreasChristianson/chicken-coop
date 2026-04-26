@@ -1,5 +1,4 @@
 import './App.css';
-import {useState} from "react";
 import logo from "./coop-logo.png"
 
 const Snapshot = () => {
