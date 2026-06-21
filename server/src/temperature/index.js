@@ -57,17 +57,14 @@ export const readTemps = async () => {
     const promises = Object.keys(thermistors)
         .map(readTemp)
         .map(promise => promiseTimeout(promise, 5000));
-    
-    const results=[];
-    for (const promise of promises) {
-        try {
-            results.push(await promise)
-        }catch (error){
-            console.log(error)
-        }
-    }
 
-    return results;
+    const settled = await Promise.allSettled(promises);
+    return settled
+        .filter(r => {
+            if (r.status === 'rejected') console.log(r.reason);
+            return r.status === 'fulfilled';
+        })
+        .map(r => r.value);
 }
 
 export const tempsHandler = async (request, h) => {
